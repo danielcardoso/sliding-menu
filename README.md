@@ -1,8 +1,8 @@
 sliding-menu
 ============
 
-Sliding Menu Plugin - Mobile app list-style navigation in the browser
-Inspired on jquery-sliding-menu <https://github.com/alizahid/jquery-sliding-menu>
+Sliding Menu Plugin - Mobile app list-style navigation in the browser.
+Inspired on jquery-sliding-menu <https://github.com/alizahid/jquery-sliding-menu>.
 
 ```
 dist/
