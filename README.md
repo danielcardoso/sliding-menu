@@ -8,11 +8,11 @@ Inspired on jquery-sliding-menu <https://github.com/alizahid/jquery-sliding-menu
 dist/
 ├── sliding-menu.css
 ├── sliding-menu.js
+├── sliding-menu.min.css
+├── sliding-menu.min.js
 ```
 
 ## Creator
-
 **Daniel Cardoso**
-
 - <https://twitter.com/DanielCardoso>
 - <https://github.com/DanielCardoso>

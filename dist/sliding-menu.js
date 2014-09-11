@@ -12,8 +12,6 @@
     var slidingMenuUsedIds = [];
 
     $.fn.slidingMenu = function (options) {
-        var selector = this.selector;
-
         var settings = $.extend({
             dataJSON: false,
             initHref: false,
