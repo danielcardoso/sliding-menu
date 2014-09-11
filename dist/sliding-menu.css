@@ -10,7 +10,6 @@
 .sliding-menu {
     position: relative;
     overflow: hidden;
-
     background: rgba(255, 255, 255, .5);
 }
 
@@ -23,49 +22,42 @@
 
 .sliding-menu li {
     margin: 0;
-
     list-style: none;
 }
 
 .sliding-menu a {
     display: block;
     padding: .8em 1em;
-
+    color: #555;
+    border: none;
     outline: none;
-
     font-size: 21px;
-    line-height: 1.4em;
-    color: #555;;
+    line-height: 1.4em;;
 }
 
 .sliding-menu a:hover {
-    background: #333;
-
     color: #fff;
+    background: #333;
 }
 
 .sliding-menu .active a {
-    background: #333;
-
     color: #fff;
+    background: #333;
 }
 
 .sliding-menu a.nav:before {
     float: right;
     margin-left: 1em;
-
     content: "\3009";
 }
 
 .sliding-menu a.back {
-    background: #555;
-
     color: #fff;
+    background: #555;
 }
 
 .sliding-menu a.back:before {
     float: left;
     margin-right: 1em;
-
     content: "\3008";
 }
