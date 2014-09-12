@@ -1,5 +1,4 @@
 /*
- *
  *  Sliding Menu Plugin
  *  Mobile app list-style navigation in the browser
  *
