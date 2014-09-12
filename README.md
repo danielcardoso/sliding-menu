@@ -3,7 +3,7 @@ sliding-menu
 
 ## Description
 Sliding Menu Plugin - Mobile app list-style navigation in the browser.
-Inspired on jquery-sliding-menu <https://github.com/alizahid/jquery-sliding-menu>.
+Inspired on jquery-sliding-menu (by Alizahid).
 
 [Live Preview](http://github.danielcardoso.net/sliding-menu/)
 
