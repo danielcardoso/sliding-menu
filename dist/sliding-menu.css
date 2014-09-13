@@ -37,11 +37,13 @@
 .sliding-menu a:hover {
     color: #fff;
     background: #333;
+    border: none;
 }
 
 .sliding-menu .active a {
     color: #fff;
     background: #333;
+    border: none;
 }
 
 .sliding-menu a.nav:before {
