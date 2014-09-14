@@ -1,10 +1,13 @@
-/*
- *  Sliding Menu Plugin
- *  Mobile app list-style navigation in the browser
+/*!
+ * Sliding Menu Plugin 0.1.0
+ * http://github.danielcardoso.net/sliding-menu/
  *
- *  Written by Daniel Cardoso
- *  http://github.danielcardoso.net/sliding-menu
+ * Authored by Daniel Cardoso
+ * https://github.com/DanielCardoso
  *
+ * Copyright 2014, Daniel Cardoso
+ * @license : The MIT License (MIT)
+ * http://opensource.org/licenses/MIT
  */
 .sliding-menu {
     position: relative;
@@ -36,14 +39,14 @@
 
 .sliding-menu a:hover {
     color: #fff;
-    background: #333;
     border: none;
+    background: #333;
 }
 
 .sliding-menu .active a {
     color: #fff;
-    background: #333;
     border: none;
+    background: #333;
 }
 
 .sliding-menu a.nav:before {

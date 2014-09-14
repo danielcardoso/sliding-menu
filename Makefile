@@ -10,6 +10,7 @@ NAME = Sliding Menu
 
 UGLIFYJS = node_modules/uglify-js/bin/uglifyjs
 UGLIFYCSS = node_modules/uglifycss/uglifycss
+JSHINT = node_modules/jshint/bin/jshint
 JS_DEST = dist/sliding-menu.js
 JS_MIN_DEST = dist/sliding-menu.min.js
 CSS_DEST = dist/sliding-menu.css
@@ -27,8 +28,9 @@ build: node_modules standalone
 #
 
 standalone:
-	@$(UGLIFYJS) $(JS_DEST) --output $(JS_MIN_DEST) -p 5 -c -m --lint --comments all
+	@$(UGLIFYJS) $(JS_DEST) --output $(JS_MIN_DEST) -p 5 -c -m --lint --comments --stats
 	@$(UGLIFYCSS) --cute-comments $(CSS_DEST) > $(CSS_MIN_DEST)
+	@$(JSHINT) $(JS_DEST)
 
 #
 # Install Node.js modules
