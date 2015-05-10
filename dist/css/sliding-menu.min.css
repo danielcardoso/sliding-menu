@@ -1,0 +1,8 @@
+/*! =========================================================
+ * Sliding Menu v0.2.0
+ * http://github.danielcardoso.net/sliding-menu/
+ * ==========================================================
+ * Copyright (c) 2014-2015 DanielCardoso.net.
+ * Licensed under MIT.
+ * ======================================================== */
+.sliding-menu{position:relative;overflow:hidden;background:rgba(255,255,255,0.5)}.sliding-menu-panel{position:absolute;top:0;left:100%;width:100%}.sliding-menu li{padding:0;margin:0;list-style:none}.sliding-menu li a{display:block;padding:.8em 1em;font-size:21px;line-height:1.4em;color:#333;text-decoration:none;border:none;outline:none}.sliding-menu li a:hover{color:#fff;background:#333;border:none}.sliding-menu .active a{color:#fff;background:#333;border:none}.sliding-menu .sliding-menu-nav:before{float:right;margin-left:1em;content:"\3009"}.sliding-menu .sliding-menu-back{color:#fff;background:#555}.sliding-menu .sliding-menu-back:before{float:left;margin-right:1em;content:"\3008"}.sliding-menu .sliding-menu-icon{margin-right:.4em}.sliding-menu .sliding-menu-separator{margin:.4em 1em;border-top:2px solid #555}

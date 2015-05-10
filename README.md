@@ -1,27 +1,30 @@
-sliding-menu
+Sliding Menu
 ============
 
 ## Description
 Sliding Menu Plugin - Mobile app list-style navigation in the browser.
-Inspired on jquery-sliding-menu (by Alizahid).
+**Inspired on jquery-sliding-menu (by Alizahid).**
 
 [Live Preview](http://github.danielcardoso.net/sliding-menu/)
 
 ```
 dist/
-├── sliding-menu.css
-├── sliding-menu.js
-├── sliding-menu.min.css
-├── sliding-menu.min.js
+├── css
+├──── sliding-menu.css
+├──── sliding-menu.min.css
+├── js
+├──── sliding-menu.js
+├──── sliding-menu.min.js
 ```
+
 
 ## Installation
 
 ##### Standalone:
 
 ```html
-<link rel="stylesheet" href="dist/sliding-menu.css" />
-<script src="dist/sliding-menu.js"></script>
+<link rel="stylesheet" href="dist/css/sliding-menu-min.css" />
+<script src="dist/js/sliding-menu.min.js"></script>
 ```
 
 
@@ -31,35 +34,40 @@ dist/
 $('#menu').slidingMenu(settings);
 ```
 
+
 ##### HTML
 ```html
 <div id="menu"></div>
 ```
 
 ## Settings and Defaults
-
 ```js
 defaults = {
+    className : "",
+    transitionDuration : 250,
     dataJSON : false,
     initHref : false,
     backLabel: 'Back'
 };
 ```
 
-- `dataJSON` : A JSON object to build the menu from. Check our JSON example;
-- `initHref` : The link to the selected panel. Set to false to use the root panel;
-- `backLabel` : Label for the back button. Set to true to use the link's own label;
+- `className` : Adicional class for menu element. (String)
+- `transitionDuration` : Default slide animation speed. (Number)
+- `dataJSON` :A JSON object to build the menu from. Check our JSON example. (Boolean)
+- `initHref` : The link to the selected panel. Set to false (boolean) to use the root panel. (String)
+- `backLabel` : Label for the back button. Set to `true` (boolean) to use the link's own label. (String)
 
 
 ## Contact
 
 If you like this component, share your appreciation by following me in [Twitter](https://twitter.com/DanielCardoso), [GitHub](https://github.com/DanielCardoso) or [Dribbble](http://dribbble.com/DanielCardoso).
 
+
 ## License
 
 The MIT License (MIT)
 
-Copyright (c) 2013-2014 Daniel Cardoso
+Copyright (c) 2014-2015 Daniel Cardoso
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
