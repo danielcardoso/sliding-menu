@@ -1,64 +1,83 @@
 /*! =========================================================
- * Sliding Menu v0.2.0
+ * Sliding Menu v0.3.0
  * http://github.danielcardoso.net/sliding-menu/
  * ==========================================================
- * Copyright (c) 2014-2015 DanielCardoso.net.
+ * Copyright (c) 2014-2019 DanielCardoso.net.
  * Licensed under MIT.
  * ======================================================== */
 .sliding-menu {
     position: relative;
     overflow: hidden;
-    background: rgba(255, 255, 255, .5);
+    background-color: rgba(255, 255, 255, 0.5);
+    text-align: left;
+    font-size: 21px;
 }
-.sliding-menu-panel {
+
+.sliding-menu__panel {
     position: absolute;
     top: 0;
     left: 100%;
     width: 100%;
 }
+
 .sliding-menu li {
     padding: 0;
     margin: 0;
     list-style: none;
 }
-.sliding-menu li a {
+
+.sliding-menu li a,
+.sliding-menu li .sliding-menu__nav {
     display: block;
     padding: .8em 1em;
+    text-align: left;
     font-size: 21px;
     line-height: 1.4em;
     color: #333;
     text-decoration: none;
-    border: none;
-    outline: none;
+    border-width: 0;
+    width: 100%;
+    background-color: transparent;
+    -webkit-transition: color 250ms ease, background-color 250ms ease;
+       -moz-transition: color 250ms ease, background-color 250ms ease;
+         -o-transition: color 250ms ease, background-color 250ms ease;
+            transition: color 250ms ease, background-color 250ms ease;
 }
-.sliding-menu li a:hover {
+
+.sliding-menu li a:hover,
+.sliding-menu li .sliding-menu__nav:hover {
     color: #fff;
-    background: #333;
-    border: none;
+    background-color: #333;
 }
+
 .sliding-menu .active a {
     color: #fff;
-    background: #333;
-    border: none;
+    background-color: #333;
 }
-.sliding-menu .sliding-menu-nav:before {
+
+.sliding-menu .sliding-menu__nav:before {
     float: right;
     margin-left: 1em;
     content: "\3009";
 }
-.sliding-menu .sliding-menu-back {
+
+.sliding-menu .sliding-menu__back {
     color: #fff;
-    background: #555;
+    background-color: #555;
+    font-weight: bold;
 }
-.sliding-menu .sliding-menu-back:before {
+
+.sliding-menu .sliding-menu__back:before {
     float: left;
     margin-right: 1em;
     content: "\3008";
 }
-.sliding-menu .sliding-menu-icon {
+
+.sliding-menu .sliding-menu__icon {
     margin-right: .4em;
 }
-.sliding-menu .sliding-menu-separator {
+
+.sliding-menu .sliding-menu__separator {
     margin: .4em 1em;
     border-top: 2px solid #555;
 }

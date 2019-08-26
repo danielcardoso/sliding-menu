@@ -1,8 +1,8 @@
 /*! =========================================================
- * Sliding Menu v0.2.0
+ * Sliding Menu v0.3.0
  * http://github.danielcardoso.net/sliding-menu/
  * ==========================================================
- * Copyright (c) 2014-2015 DanielCardoso.net.
+ * Copyright (c) 2014-2019 DanielCardoso.net.
  * Licensed under MIT.
  * ======================================================== */
 if (typeof jQuery === 'undefined') {
@@ -31,15 +31,19 @@ if (typeof jQuery === 'undefined') {
 
     SlidingMenu.NAME = 'Sliding Menu';
 
-    SlidingMenu.VERSION = '0.2.0';
+    SlidingMenu.VERSION = '0.3.0';
 
     SlidingMenu.MAIN_CLASS = 'sliding-menu';
 
-    SlidingMenu.PANEL_CLASS = SlidingMenu.MAIN_CLASS + '-panel';
+    SlidingMenu.PANEL_CLASS = SlidingMenu.MAIN_CLASS + '__panel';
 
-    SlidingMenu.ICON_CLASS = SlidingMenu.MAIN_CLASS + '-icon';
+    SlidingMenu.ICON_CLASS = SlidingMenu.MAIN_CLASS + '__icon';
 
-    SlidingMenu.NAVIGATION_CLASS = SlidingMenu.MAIN_CLASS + '-nav';
+    SlidingMenu.NAVIGATION_CLASS = SlidingMenu.MAIN_CLASS + '__nav';
+
+    SlidingMenu.BACK_CLASS = SlidingMenu.MAIN_CLASS + '__back';
+
+    SlidingMenu.SEPARATOR_CLASS = SlidingMenu.MAIN_CLASS + '__separator';
 
     SlidingMenu.SET_ICON_CLASS = 'sm-set-icon';
 
@@ -73,7 +77,7 @@ if (typeof jQuery === 'undefined') {
     };
 
     SlidingMenu.prototype.events = function () {
-        this.$el.on('click', 'a', $.proxy(this._onClickItem, this));
+        this.$el.on('click', 'a, .' + SlidingMenu.NAVIGATION_CLASS, $.proxy(this._onClickItem, this));
     };
 
     SlidingMenu.prototype._onClickItem = function (event) {
@@ -82,9 +86,8 @@ if (typeof jQuery === 'undefined') {
         linker = $(event.currentTarget);
 
         if (linker.attr('data-id') !== undefined) {
-            event.preventDefault();
 
-            movePanelTo = linker.hasClass(SlidingMenu.MAIN_CLASS + '-back');
+            movePanelTo = linker.hasClass(SlidingMenu.BACK_CLASS);
             targetPanel = this.$('.' + SlidingMenu.PANEL_CLASS + '[data-id="' + linker.attr('data-id') + '"]');
 
             if (this.currentPanel.attr('data-id') !== targetPanel.attr('data-id')) {
@@ -118,13 +121,114 @@ if (typeof jQuery === 'undefined') {
     SlidingMenu.prototype.process = function () {
         var data;
 
-        if (this.options.dataJSON) {
+        if (this.options.dataJSON === true) {
             data = this.processJSON(this.options.dataJSON);
         } else {
             data = this.processHTML();
         }
 
         this.setMenuContent(data);
+    };
+
+    SlidingMenu.prototype.processJSON = function (data, parent, backLabel) {
+        var root, panels;
+
+        root = {
+            id: SlidingMenu.PANEL_CLASS + '-' + this.getNewId(),
+            root: parent ? false : true,
+            children: []
+        };
+        panels = [];
+
+        if (parent) {
+            root.children.push({
+                panelId: parent.id,
+                href: false,
+                label: this.options.backLabel === true ? backLabel : this.options.backLabel,
+                _styleClass: SlidingMenu.BACK_CLASS + ' ' + SlidingMenu.NAVIGATION_CLASS
+            });
+        }
+
+        $(data).each($.proxy(function (index, item) {
+            var panel;
+
+            root.children.push(item);
+
+            if (item.children) {
+                panel = this.processJSON(item.children, root, item.label);
+                item.panelId = panel[0].id;
+                item._styleClass = SlidingMenu.NAVIGATION_CLASS;
+                panels = panels.concat(panel);
+
+                // Delete all childrens
+                delete item.children;
+            }
+        }, this));
+
+        return [root].concat(panels);
+    };
+
+    SlidingMenu.prototype.processHTML = function (parentElem, parentObj, backLabel) {
+        var root, panels;
+
+        root = {
+            id: SlidingMenu.PANEL_CLASS + '-' + this.getNewId(),
+            root: parentElem ? false : true,
+            children: []
+        };
+        panels = [];
+
+        if (parentElem !== undefined) {
+            root.children.push({
+                panelId: parentObj.id,
+                href: false,
+                label: this.options.backLabel === true ? backLabel : this.options.backLabel,
+                _styleClass: SlidingMenu.BACK_CLASS + ' ' + SlidingMenu.NAVIGATION_CLASS
+            });
+        } else {
+            parentElem = this.$el.children('ul');
+        }
+
+        parentElem.children('li').each($.proxy(function (key, item) {
+            var itemObj, itemLink, panel, subPanel;
+
+            item = $(item);
+
+            if (!item.hasClass('separator')) {
+                itemLink = item.children('a');
+
+                itemObj = {
+                    icon: itemLink.find('.' + SlidingMenu.SET_ICON_CLASS).attr('class') || undefined,
+                    href: itemLink.attr('href'),
+                    label: this.trimWhiteSpaces(itemLink.text()),
+                    classNames: {
+                        parent: this.trimWhiteSpaces(item.attr('class') || ''),
+                        element: this.trimWhiteSpaces(itemLink.attr('class') || '')
+                    }
+                };
+
+                if (itemObj.icon !== undefined) {
+                    itemObj.icon = (itemObj.icon).replace(SlidingMenu.SET_ICON_CLASS, '');
+                }
+
+                subPanel = item.children('ul');
+                if (subPanel.length !== 0) {
+                    panel = this.processHTML(subPanel, root, itemObj.label);
+
+                    itemObj.panelId = panel[0].id;
+                    itemObj._styleClass = SlidingMenu.NAVIGATION_CLASS;
+                    panels = panels.concat(panel);
+                }
+            } else {
+                itemObj = {
+                    separator: true
+                };
+            }
+
+            root.children.push(itemObj);
+        }, this));
+
+        return [root].concat(panels);
     };
 
     SlidingMenu.prototype.setMenuContent = function (json) {
@@ -152,15 +256,24 @@ if (typeof jQuery === 'undefined') {
                 li = $('<li/>');
 
                 if (item.separator !== true) {
-                    link = $('<a/>');
+                    link = item.panelId ? $('<button/>') : $('<a/>');
 
-                    link.attr({
-                        'class': item.styleClass,
-                        'href': item.href
-                    });
+                    if (item.classNames !== undefined) {
+                        li.addClass(item.classNames.parent);
+                        link.addClass(item.classNames.element);
+                    }
+
+                    link.addClass(item._styleClass);
 
                     if (item.panelId) {
-                        link.attr('data-id', item.panelId);
+                        link.attr({
+                            'type': 'button',
+                            'data-id': item.panelId
+                        });
+                    } else {
+                        link.attr({
+                            'href': item.href
+                        });
                     }
 
                     link.text(item.label);
@@ -173,7 +286,7 @@ if (typeof jQuery === 'undefined') {
                     }
                     li.append(link);
                 } else {
-                    li.addClass(SlidingMenu.MAIN_CLASS + '-separator');
+                    li.addClass(SlidingMenu.SEPARATOR_CLASS);
                 }
 
                 panel.append(li);
@@ -212,102 +325,6 @@ if (typeof jQuery === 'undefined') {
 
         this.options.initHref = false;
         this.currentPanel.css('left', 0);
-    };
-
-    SlidingMenu.prototype.processHTML = function (parentElem, parentObj, backLabel) {
-        var root, panels;
-
-        root = {
-            id: SlidingMenu.PANEL_CLASS + '-' + this.getNewId(),
-            root: parentElem ? false : true,
-            children: []
-        };
-        panels = [];
-
-        if (parentElem !== undefined) {
-            root.children.push({
-                panelId: parentObj.id,
-                href: parentObj.id,
-                label: this.options.backLabel === true ? backLabel : this.options.backLabel,
-                styleClass: SlidingMenu.MAIN_CLASS + '-back ' + SlidingMenu.NAVIGATION_CLASS
-            });
-        } else {
-            parentElem = this.$el.children('ul');
-        }
-
-        parentElem.children('li').each($.proxy(function (key, item) {
-            var itemObj, itemLabel, panel, subPanel;
-
-            item = $(item);
-
-            if (!item.hasClass('separator')) {
-                itemLabel = item.children('a');
-                itemObj = {
-                    icon: itemLabel.find('.' + SlidingMenu.SET_ICON_CLASS).attr('class') || undefined,
-                    href: itemLabel.attr('href'),
-                    label: this.trimWhiteSpaces(itemLabel.text())
-                };
-
-                if (itemObj.icon !== undefined) {
-                    itemObj.icon = (itemObj.icon).replace(SlidingMenu.SET_ICON_CLASS, '');
-                }
-
-                subPanel = item.children('ul');
-                if (subPanel.length !== 0) {
-                    panel = this.processHTML(subPanel, root, itemObj.label);
-
-                    itemObj.panelId = panel[0].id;
-                    itemObj.styleClass = SlidingMenu.NAVIGATION_CLASS;
-                    panels = panels.concat(panel);
-                }
-            } else {
-                itemObj = {
-                    separator: true
-                };
-            }
-
-            root.children.push(itemObj);
-        }, this));
-
-        return [root].concat(panels);
-    };
-
-    SlidingMenu.prototype.processJSON = function (data, parent, backLabel) {
-        var root, panels;
-
-        root = {
-            id: SlidingMenu.PANEL_CLASS + '-' + this.getNewId(),
-            root: parent ? false : true,
-            children: []
-        };
-        panels = [];
-
-        if (parent) {
-            root.children.push({
-                panelId: parent.id,
-                href: parent.id,
-                label: this.options.backLabel === true ? backLabel : this.options.backLabel,
-                styleClass: SlidingMenu.MAIN_CLASS + '-back ' + SlidingMenu.NAVIGATION_CLASS
-            });
-        }
-
-        $(data).each($.proxy(function (index, item) {
-            var panel;
-
-            root.children.push(item);
-
-            if (item.children) {
-                panel = this.processJSON(item.children, root, item.label);
-                item.panelId = panel[0].id;
-                item.styleClass = SlidingMenu.NAVIGATION_CLASS;
-                panels = panels.concat(panel);
-
-                // Delete all childrens
-                delete item.children;
-            }
-        }, this));
-
-        return [root].concat(panels);
     };
 
     SlidingMenu.prototype.trimWhiteSpaces = function (text) {
